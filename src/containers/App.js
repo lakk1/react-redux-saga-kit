@@ -1,36 +1,21 @@
 import React from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Layout } from "antd";
+import MmHeader from "../components/mmHeader";
+import HomePage from "./HomePage";
 
-import { requestApiData } from "../actions";
+const {  Footer, Content } = Layout;
 
-class App extends React.Component {
-  componentDidMount() {
-    this.props.requestApiData();
-  }
+const App = () => (
+  <Router>
+    <Layout>
+      <MmHeader />
+      <Content>
+        <Route exact path="/" component={HomePage} />
+      </Content>
+      <Footer>Footer</Footer>
+    </Layout>
+  </Router>
+);
 
-  person = (x, i) => (
-    <div key={x.id.value}>
-      <h1>{x.gender}</h1>
-      <h1>{x.name.first}</h1>
-      <h1>{x.name.last}</h1>
-      <img src={x.picture.medium} alt="medium" />
-    </div>
-  );
-
-  render() {
-    const { results = [] } = this.props.data;
-    return results.length ? (
-      <h1>{results.map(this.person)}</h1>
-    ) : (
-      <h1>loading...</h1>
-    );
-  }
-}
-
-const mapStateToProps = state => ({ data: state.data });
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ requestApiData }, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
